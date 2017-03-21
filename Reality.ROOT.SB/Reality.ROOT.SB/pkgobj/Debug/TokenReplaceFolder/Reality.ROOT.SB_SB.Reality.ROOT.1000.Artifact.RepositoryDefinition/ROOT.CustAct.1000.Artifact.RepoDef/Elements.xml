@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction
+    Sequence="1001"
+    Id="Reality.ArtifactRepoHostFQDN.1001.AddDIVtag"
+    Title="Reality.ArtifactRepoHostFQDN.1001.AddDIVtag"
+    Location="ScriptLink"
+    ScriptBlock="
+    //BEGIN Reality.ArtifactRepoHostFQDN.1001.AddDIVtag
+            if(!(SP.SOD.executeOrDelayUntilScriptLoaded(function(){},'sp.js'))){LoadSodByKey('sp.js',function(){})};
+
+            var currDom;
+            var artifactWAP;
+            var artifactLibURL;
+            var artifactSANdomLibURL;
+            
+            //Establish the artifactWAP name=value pair from window.name (e.g. where is {Reality.ArtRepoDef:&quot;artifacts.somedomain.com&quot;EoARD}) eliminating JSOM calls wherever possible
+            var winNmArtifactWAPInd = window.name.indexOf('Reality.ArtRepoDef:&quot;');
+
+            var currHost = window.location.host.split('.');
+            var currApp = currHost[0];
+            currHost.shift();
+            window.currDom = currHost.join('.');
+            
+            function prRegScrToSODQueue(n, t, r, u, f, e) {
+                SP.SOD.executeOrDelayUntilScriptLoaded(function () {
+                    var h = t.toLowerCase().toString(), o = (h + r.toLowerCase()).toString(), s = SP.Utilities.UrlBuilder.urlCombine(n.toLowerCase().toString(), o);
+                    for (SP.SOD.registerSod(o, s), i = 0; i &lt; u.length; i++)
+                        SP.SOD.registerSodDep(o, u[i]);
+                    logInfo = &quot;&lt;DIV id='&quot; + o + &quot;'&gt;&lt;a title='&quot; + (f + &quot;.&quot; + e) + &quot;' href='&quot; + s + &quot;'&gt;&lt;\/a&gt;&lt;\/DIV&gt;&quot;;
+                    LoadSodByKey(o, function () {
+                        document.getElementById('Reality.ROOT.SOD.Register').innerHTML += logInfo;
+                    });
+                }, 'sp.js');
+            };
+            
+            function setArtifactLibs(library) {
+                if (typeof artifactDepot == 'undefined') {
+                    if(window.artifactWAP.indexOf('http') == -1) {
+                        var artifactLibURLFQDN = window.location.protocol + '//' + window.artifactWAP
+                    }
+                    else{
+                        var artifactLibURLFQDN = window.artifactWAP
+                    };
+                    if(artifactLibURLFQDN.indexOf(currDom + '/') == -1) {
+                        window.artifactLibURL = artifactLibURLFQDN + '/' + library; 
+                        window.artifactSANdomLibURL = artifactLibURLFQDN + '/' + currApp + '/' + library;
+                    }
+                    else{ 
+                        window.artifactLibURL = artifactLibURLFQDN + library;
+                        window.artifactSANdomLibURL = artifactLibURLFQDN + currApp + '/' + library;
+                    };
+
+                    //Add Enterprise Artifact Repository to the DOM
+                    window.artifactDepot = document.createElement('div');
+                    window.artifactDepot.id = 'Reality.artifactDepot';
+                    window.artifactDepot.style.visibility ='hidden';
+                    window.artifactDepot.innerHTML = (&quot;&lt;span id='Reality.ROOT.WindowVARs'&gt;&lt;/span&gt;&lt;span id='Reality.ROOT.ElemStage'&gt;&lt;/span&gt;&lt;span id='Reality.ROOT.SOD.Register'&gt;&lt;/span&gt;&quot;);
+                    document.body.appendChild(window.artifactDepot);
+                          
+                    document.getElementById('Reality.ROOT.WindowVARs').innerHTML += (&quot;&lt;DIV id='window.currDom'&gt;&lt;a title='window.currDom' href='&quot; + window.currDom + &quot;'&gt;&lt;/&gt;&lt;/&gt;&quot;);
+                    document.getElementById('Reality.ROOT.WindowVARs').innerHTML += (&quot;&lt;DIV id='window.artifactLibURL'&gt;&lt;a title='window.artifactLibURL' href='&quot; + window.artifactLibURL + &quot;'&gt;&lt;/&gt;&lt;/&gt;&quot;);
+                    document.getElementById('Reality.ROOT.WindowVARs').innerHTML += (&quot;&lt;DIV id='window.artifactSANdomLibURL'&gt;&lt;a title='window.artifactSANdomLibURL' href='&quot; + window.artifactSANdomLibURL + &quot;'&gt;&lt;/&gt;&lt;/&gt;&quot;);
+                        
+                    if(typeof window.pBagartifactWAP !== 'undefined'){
+                        document.getElementById('Reality.ROOT.WindowVARs').innerHTML += (&quot;&lt;DIV id='window.pBagartifactWAP'&gt;&lt;a title='window.pBagartifactWAP' href='&quot; + window.pBagartifactWAP + &quot;'&gt;&lt;/&gt;&lt;/&gt;&quot;);
+                    };
+                          
+                    SP.SOD.notifyEventAndExecuteWaitingJobs('ArtifactRepoDefined');
+                };
+            };
+            
+            SP.SOD.executeOrDelayUntilEventNotified(function(){
+                setArtifactLibs('lib');
+            },'artifactWAPDefined')
+            
+            function getWebProperties(){
+                var pBag;
+                var prCtx = new SP.ClientContext.get_current();
+                pBag = prCtx.get_web().get_allProperties();
+                prCtx.load(pBag);
+                prCtx.executeQueryAsync(Function.createDelegate(this, prCtxQuerySucceeded), Function.createDelegate(this, prCtxQueryFailed));
+ 
+                function prCtxQuerySucceeded() {
+                    var allProps = pBag.get_fieldValues();
+                    if((allProps['Reality.ArtifactRepoHostFQDN'] !== undefined) &amp;&amp; (allProps['Reality.ArtifactRepoHostFQDN'] !== '')){
+                        window.pBagartifactWAP = allProps['Reality.ArtifactRepoHostFQDN'];
+                        window.artifactWAP = window.pBagartifactWAP;
+                        SP.SOD.notifyEventAndExecuteWaitingJobs('pBagQueried')
+                    }
+                }
+                function prCtxQueryFailed(args, sender) {
+                    SP.SOD.notifyEventAndExecuteWaitingJobs('pBagQueried')
+                    console.log('window.pBagartifactWAP')
+                }
+            };
+
+            //If the window.name, use it to save load time from property bag derivation
+            if(winNmArtifactWAPInd > -1){
+                window.artifactWAP = window.name.substring(winNmArtifactWAPInd,window.name.indexOf('&quot;EoARD}')).replace('Reality.ArtRepoDef:&quot;','')
+                SP.SOD.notifyEventAndExecuteWaitingJobs('artifactWAPDefined')
+            }
+            else{
+                SP.SOD.executeOrDelayUntilScriptLoaded(getWebProperties, 'sp.js');
+                SP.SOD.executeOrDelayUntilEventNotified(function(){
+                    if((typeof window.pBagartifactWAP !== 'undefined') &amp;&amp; (window.artifactWAP !== '')){
+                        SP.SOD.executeOrDelayUntilEventNotified(function(){
+                            if(winNmArtifactWAPInd == -1){window.name += '{Reality.ArtRepoDef:&quot;' + window.artifactWAP + '&quot;EoARD}'}
+                        },'artifactWAPDefined')                    
+                        SP.SOD.notifyEventAndExecuteWaitingJobs('artifactWAPDefined')
+                    }
+                    else{
+                        if(window.currDom == '.' || window.currDom == '' ){
+                        }
+                        else if((window.currDom !== '.') &amp;&amp; (window.currDom !== '' ) &amp;&amp; (window.artifactWAP == '')){
+                            window.artifactWAP = 'assets.' + currDom;
+                            SP.SOD.notifyEventAndExecuteWaitingJobs('artifactWAPDefined')
+                        };
+                    }
+                },'pBagQueried')
+                
+            }
+            
+    //END Reality.ArtifactRepoHostFQDN.1001.AddDIVtag
+    "/>
+</Elements>
+
+<!--
+-->

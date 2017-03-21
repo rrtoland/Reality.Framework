@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction
+    Sequence="3001"
+    Id="Reality.Tools.FOUNDRY.3001"
+    Title="Reality.Tools.FOUNDRY.3001"
+    Location="ScriptLink"
+    ScriptBlock="
+    //BEGIN Reality.Tools.FOUNDRY.3001
+            if (typeof RF !== 'undefined'){
+                if (typeof RF.FOUNDRY == 'undefined'){
+                    RF.FOUNDRY = {};
+                }
+            }
+
+            function rfCupellation(){
+                document.getElementById('aspnetForm').style.visibility = 'hidden';
+            }
+            RF.FOUNDRY.Cupellation = rfCupellation;
+            
+            RF.FOUNDRY.Cupellation();
+            
+            if(!(SP.SOD.executeOrDelayUntilScriptLoaded(function(){},'sp.js'))){LoadSodByKey('sp.js',function(){})};
+            if (typeof RF.regSODwithDEP !== 'undefined') {
+                SP.SOD.executeOrDelayUntilEventNotified(function(){
+                    SP.SOD.executeOrDelayUntilScriptLoaded(function () {
+                        RF.regSODwithDEP((wn.rfCDN + '/scripts/FOUNDRY/'), 'Reality.Tools.FOUNDRY.min', '.js', 'sp.js', '600636a9-ef72-46db-8b8b-0dcd2803842c', '3001.0', 'false');
+                        RF.regSODwithDEP((window.rootArtifactLibURL + '/scripts/FOUNDRY/'), 'Ent.ECMA.FOUNDRY.min', '.js', 'sp.js', '600636a9-ef72-46db-8b8b-0dcd2803842c', '3001.1', 'false');
+                    }, 'sp.js');
+                }, 'artifactRepoDefined');
+            }
+    //END Reality.Tools.FOUNDRY.3001
+    "/>
+  </Elements>

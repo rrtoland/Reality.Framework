@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction
+    Sequence="4001"
+    Id="Reality.Tools.FORGE.4001"
+    Title="Reality.Tools.FORGE.4001"
+    Location="ScriptLink"
+    ScriptBlock="
+    //BEGIN Reality.Tools.FORGE.4001
+            if(!(SP.SOD.executeOrDelayUntilScriptLoaded(function(){},'sp.js'))){LoadSodByKey('sp.js',function(){})};
+            if (typeof prRegScrToSODQueue != 'undefined') {
+                SP.SOD.executeOrDelayUntilEventNotified(function(){
+                    SP.SOD.executeOrDelayUntilScriptLoaded(function () {
+                        prRegScrToSODQueue(('http://www.perpetualreality.com/lib' + '/scripts/FORGE/'), 'Reality.Tools.FORGE.min', '.js', 'Reality.Tools.FOUNDRY.min.js', '4c1942f6-c6a9-4f8b-9b9b-9d14c3479b9a', '4001.0');
+                        prRegScrToSODQueue((window.rootAssetLibURL + '/scripts/FORGE/'), 'Ent.ECMA.FORGE.min', '.js', 'Ent.ECMA.FOUNDRY.min.js', '4c1942f6-c6a9-4f8b-9b9b-9d14c3479b9a', '4001.1');
+                    }, 'sp.js');
+                }, 'AssetLibDefined');
+            }
+    //END Reality.Tools.FORGE.4001
+    "/>
+</Elements>

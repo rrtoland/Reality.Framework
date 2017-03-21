@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" ActivateOnDefault="FALSE" Description="Declares a Custom Action inclusion of the Reality Framework's FORGE script library from both the locally defined Artifact Repository and the Perpetual Reality CDN." Id="1a880c7a-8adb-49b1-8502-92face54b7c2" Scope="Site" Title="Reality.Tools.Forge">
+  <ElementManifests>
+    <ElementManifest Location="ROOT.CustAct.4000.Tools.FORGE\Elements.xml" />
+  </ElementManifests>
+</Feature>

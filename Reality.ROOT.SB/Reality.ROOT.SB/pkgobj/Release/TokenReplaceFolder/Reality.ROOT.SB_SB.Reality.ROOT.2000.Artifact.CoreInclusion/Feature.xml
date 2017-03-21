@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Description="Declares the Custom Actions for inclusion of core function library and dependency inclusion script from locally derived variable(s):  window.rootAssetLibURL and window.artifactSANdomLibURL" Id="79fa3cc7-2395-4478-b986-747c24087e0b" Scope="Site" Title="Reality.Artifact.Core Inclusion">
+  <ElementManifests>
+    <ElementManifest Location="ROOT.CustAct.2000.Artifact.CORE\Elements.xml" />
+  </ElementManifests>
+</Feature>

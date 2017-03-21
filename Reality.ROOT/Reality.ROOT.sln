@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reality.ROOT", "Reality.ROOT\Reality.ROOT.csproj", "{C38029C5-5426-4DC7-892F-4391675407C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C38029C5-5426-4DC7-892F-4391675407C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C38029C5-5426-4DC7-892F-4391675407C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C38029C5-5426-4DC7-892F-4391675407C2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C38029C5-5426-4DC7-892F-4391675407C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C38029C5-5426-4DC7-892F-4391675407C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C38029C5-5426-4DC7-892F-4391675407C2}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://perpetualreality.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Reality.ROOT\\Reality.ROOT.csproj
+		SccProjectName1 = Reality.ROOT
+		SccLocalPath1 = Reality.ROOT
+	EndGlobalSection
+EndGlobal

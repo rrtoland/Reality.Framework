@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Description="Declares the Custom Actions to derived local artifact repository variable(s):  window.rootAssetLibURL and window.artifactSANdomLibURL" Id="a38a534b-3f37-40c9-a607-eef1df18290f" Scope="WebApplication" Title="Reality.Artifact.Repository Definition">
+  <ElementManifests>
+    <ElementManifest Location="ROOT.CustAct.1000.Artifact.RepoDef\Elements.xml" />
+  </ElementManifests>
+</Feature>

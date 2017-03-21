@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<feature xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="600636a9-ef72-46db-8b8b-0dcd2803842c" description="Declares a Custom Action inclusion of the Reality Framework's FOUNDRY script library from both the locally defined Artifact Repository and the Perpetual Reality CDN. As an almagamation of client technologies, this library prepares the browser with a mixture of data and element control in advance of the FORGE feature sets." featureId="600636a9-ef72-46db-8b8b-0dcd2803842c" imageUrl="" scope="Site" solutionId="00000000-0000-0000-0000-000000000000" title="Reality.Tools.Foundry" version="" deploymentPath="$SharePoint.Project.FileNameWithoutExtension$_$SharePoint.Feature.FileNameWithoutExtension$" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/FeatureModel">
+  <projectItems>
+    <projectItemReference itemId="35a2f81b-d31f-4962-8c9e-c18554a6cd1a" projectPath="..\..\Reality\Reality.csproj" />
+  </projectItems>
+</feature>

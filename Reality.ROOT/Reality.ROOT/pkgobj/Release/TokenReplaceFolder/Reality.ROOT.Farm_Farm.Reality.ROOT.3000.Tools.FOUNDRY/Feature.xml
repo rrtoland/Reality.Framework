@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" ActivateOnDefault="FALSE" Description="Declares a Custom Action inclusion of the Reality Framework's FOUNDRY script library from Perpetual Reality CDN. As an almagamation of client technologies, this library prepares the browser with a mixture of data and element control in advance of the FORGE feature sets." Id="77f87252-be67-43a8-8449-9da9f70cb5a9" Scope="Site" Title="Reality.Tools.Foundry">
+  <ElementManifests>
+    <ElementManifest Location="ROOT.CustAct.3000.Tools.FOUNDRY\Elements.xml" />
+  </ElementManifests>
+</Feature>

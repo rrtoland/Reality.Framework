@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction
+    Sequence="2001"
+    Id="Ent.ECMA.Core.FuncLib.2001"
+    Title="Ent.ECMA.Core.FuncLib.2001"
+    Location="ScriptLink"
+    ScriptBlock="
+    //BEGIN Ent.ECMA.Core.FuncLib.2001
+            if (typeof RF !== 'undefined'){
+                if (typeof RF.CORE === 'undefined'){
+                    RF.CORE = {};
+                }
+            }
+            if(!(SP.SOD.executeOrDelayUntilScriptLoaded(function(){},'sp.js'))){LoadSodByKey('sp.js',function(){})};
+            SP.SOD.executeOrDelayUntilEventNotified(function(){
+                SP.SOD.executeOrDelayUntilScriptLoaded(function () {
+                    RF.regSODwithDEP((window.rootArtifactLibURL + '/scripts/CORE/'), 'Ent.ECMA.Core.FuncLib.min', '.js', 'core.js', '79fa3cc7-2395-4478-b986-747c24087e0b', '2001', 'false');
+                }, 'sp.js');
+            }, 'artifactRepoDefined');
+    //END Ent.ECMA.Core.FuncLib.2001
+    "/>
+  <CustomAction
+    Sequence="2002"
+    Id="Ent.ECMA.Core.Include.2002"
+    Title="Ent.ECMA.Core.Include.2002"
+    Location="ScriptLink"
+    ScriptBlock="
+    //BEGIN Ent.ECMA.Core.Include.2002
+            SP.SOD.executeOrDelayUntilEventNotified(function(){
+                SP.SOD.executeOrDelayUntilScriptLoaded(function () {
+                    RF.regSODwithDEP((window.rootArtifactLibURL + '/scripts/CORE/'), 'Ent.ECMA.Core.Include.min', '.js', 'Ent.ECMA.Core.FuncLib.js', '79fa3cc7-2395-4478-b986-747c24087e0b', '2002', 'false');
+                }, 'sp.js');
+                
+                for (var key in window.wn){
+                    if(key.startsWith('registerSod')){
+                        var jsonProp = JSON.parse(wn[key])
+                        var fileLoc = (jsonProp['fileURL'].substr( 0, (jsonProp['fileURL'].lastIndexOf('/') + 1)));
+                        var fileWithExt = jsonProp['fileURL'].replace(fileLoc,'');
+                        var fileName = (fileWithExt.substr( 0, (fileWithExt.lastIndexOf('.') + 1)));
+                        var fileExt = fileWithExt.replace(fileName, '');
+                        RF.regSODwithDEP(fileLoc, fileName, fileExt, jsonProp['fileDEP'], '79fa3cc7-2395-4478-b986-747c24087e0b', '2002', jsonProp['fileAnnounce']);
+                    };
+                };               
+            }, 'artifactRepoDefined');
+    //END Ent.ECMA.Core.Include.2002
+    "/>
+</Elements>
+
+<!--
+-->

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns="http://schemas.microsoft.com/sharepoint/" SolutionId="f6a06a54-bf43-4585-a780-639c796540b0" ResetWebServer="TRUE" SharePointProductVersion="15.0">
+  <FeatureManifests>
+    <FeatureManifest Location="Reality.ROOT.Farm_Farm.Reality.ROOT.1000.Artifact.RepositoryDefinition\Feature.xml" />
+    <FeatureManifest Location="Reality.ROOT.Farm_Farm.Reality.ROOT.2000.Artifact.CoreInclusion\Feature.xml" />
+    <FeatureManifest Location="Reality.ROOT.Farm_Farm.Reality.ROOT.3000.Tools.FOUNDRY\Feature.xml" />
+    <FeatureManifest Location="Reality.ROOT.Farm_Farm.Reality.ROOT.4000.Tools.FORGE\Feature.xml" />
+  </FeatureManifests>
+</Solution>

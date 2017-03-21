@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package dslVersion="1.0.0.0" 
+        Id="eefe2d4e-d53e-4ef8-896a-abe9351e144b" 
+        solutionId="eefe2d4e-d53e-4ef8-896a-abe9351e144b" 
+        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
+        name="Reality.ROOT.App"
+        sharePointProductVersion="15.0">
+  <features>
+        <featureReference itemId="8ea4cb2f-fd72-4042-a9dc-a9eaa9c14b27" />
+  </features>
+</package>

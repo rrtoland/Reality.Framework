@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction
+    Sequence="1001"
+    Id="Reality.ArtifactRepoHostFQDN.1001.AddDIVtag"
+    Title="Reality.ArtifactRepoHostFQDN.1001.AddDIVtag"
+    Location="ScriptLink"
+    ScriptBlock="
+    //BEGIN Reality.ArtifactRepoHostFQDN.1001.AddDIVtag
+            if(!(SP.SOD.executeOrDelayUntilScriptLoaded(function(){},'sp.js'))){LoadSodByKey('sp.js',function(){})};
+
+            var RF = RF || {};
+            var currDom;
+            var artifactLibURL;
+            var artifactSANdomLibURL;
+            var currHost = window.location.host.split('.');
+            var currApp = currHost[0];
+            currHost.shift();
+            window.currDom = currHost.join('.');
+            var rfpBag = {};
+            var wn = {};
+            wn.rfCDN = 'https://RealityFramework.azureedge.net';
+
+            function getWebProperties(){
+                var prCtx = new SP.ClientContext.get_current();
+                var sColl = prCtx.get_site();
+                var scpBag = sColl.get_rootWeb().get_allProperties();
+                prCtx.load(scpBag);
+                prCtx.executeQueryAsync(Function.createDelegate(this, prCtxQuerySucceeded), Function.createDelegate(this, prCtxQueryFailed));
+ 
+                function prCtxQuerySucceeded() {
+                    var allProps = scpBag.get_fieldValues();
+
+                    for (var key in allProps){
+                        if( (key.toLowerCase().startsWith('rf.')) ||
+                            (key.toLowerCase().startsWith('pr.')) ||
+                            (key.toLowerCase().startsWith('prf.')) ||
+                            (key.toLowerCase().startsWith('ent.ecma.')) ||
+                            (key.toLowerCase().startsWith('reality.')) ||
+                            (key.toLowerCase().startsWith('realityframework.'))
+                        ){
+                            rfpBag[key] = allProps[key];
+                            var keyRepl = key.replace(/reality.|realityframework.|ent.ecma.|prf.|pr.|rf./gi, '')
+                            switch(keyRepl){
+                                case 'OverrideCDNPath':
+                                    if( (allProps[key] !== wn.rfCDN) ){
+                                        if( (wn.rfARH == wn.rfCDN) ){
+                                            wn.rfARH = allProps[key];
+                                        }
+                                        wn.rfCDN = allProps[key];
+                                    }
+                                    break;
+                                case 'ArtifactRepoHostFQDN':
+                                    wn.rfARH = allProps[key];
+                                    break;
+                                case 'ArtifactRepoHostSAN':
+                                    if( (window.currDom !== '' ) &amp;&amp; 
+                                        (window.currDom !== '.') &amp;&amp; 
+                                        (wn.rfARH == '')
+                                    ){
+                                        wn.rfARH = allProps[key] + '.' + currDom;
+                                    };
+                                    break;
+                                case 'ArtifactRepoHostSepHTTP':
+                                    if(window.location.protocol == 'http:') {
+                                        wn.rfARH = allProps[key];
+                                    }
+                                    break;
+                                case 'ArtifactRepoHostSepHTTPS':
+                                    if(window.location.protocol == 'https:') {
+                                        wn.rfARH = allProps[key];
+                                    }
+                                    break;
+                                case 'ArtifactRepoHostSubDomainFolder':
+                                    wn.rfARHSDF = allProps[key];
+                                    break;
+                                case 'wapGAID':
+                                    wn[keyRepl] = allProps[key];
+                                    break;
+                                case 'wapGTMID':
+                                    wn[keyRepl] = allProps[key];
+                                    break;
+                                default :
+                                    if( (window.currDom !== '' ) &amp;&amp; 
+                                        (window.currDom !== '.') &amp;&amp; 
+                                        ((wn.rfARH == '') || (wn.rfARH == 'undefined') || (typeof wn.rfARH == 'undefined'))
+                                    ){
+                                        wn.rfARH = 'assets.' + currDom;
+                                    };
+                                    break;
+                            }
+                            
+                            SP.SOD.notifyEventAndExecuteWaitingJobs(keyRepl);
+                        }
+                    }
+                    SP.SOD.notifyEventAndExecuteWaitingJobs('pBagQueried')
+                }
+                
+                function prCtxQueryFailed(args, sender) {
+                    console.log('wn.rfARH')
+                    SP.SOD.notifyEventAndExecuteWaitingJobs('pBagQueried')
+                }
+            };
+
+            //Establish the artifactWAP name=value pair from window.name (e.g. where JSON object contains {&quot;rfARH&quot;:&quot;artifacts.somedomain.com&quot;}) eliminating JSOM calls wherever possible
+            var winNmArtifactWAPInd = window.name.indexOf('rfARH');
+            
+            //If the referrer is of same domain, check for window.name hash and use it to save load time from property bag derivation
+            if( (document.referrer.indexOf(window.location.host) !== -1) &amp;&amp; 
+                (winNmArtifactWAPInd > -1) 
+            ){
+                wn = JSON.parse(window.name);
+                SP.SOD.notifyEventAndExecuteWaitingJobs('artifactWAPDefined')
+            }
+            else{
+                SP.SOD.executeOrDelayUntilScriptLoaded(getWebProperties, 'sp.js');
+                SP.SOD.executeOrDelayUntilEventNotified(function(){
+                    if( (typeof wn.rfARH !== 'undefined') &amp;&amp; 
+                        (wn.rfARH !== '')
+                    ){
+                        SP.SOD.executeOrDelayUntilEventNotified(function(){
+                            if(winNmArtifactWAPInd == -1){
+                                window.name = JSON.stringify(wn);
+                            }
+                        },'artifactWAPDefined');
+                        
+                        for (var key in rfpBag){
+                            var keyRepl = key.replace(/reality.|realityframework.|ent.ecma.|prf.|pr.|rf./gi, '');
+                            switch(keyRepl){
+                                case 'ArtifactRepoHostFromCDN':
+                                    //Do a final check for CDN override to Articaft WApp
+                                    if( (rfpBag[key] == 'true') || 
+                                        (rfpBag[key] == 1)
+                                    ){
+                                        wn.rfARH = wn.rfCDN;
+                                    }
+                                    break;
+                                default :
+                                    //Catch any remaining property bag values
+                                    if( !(keyRepl.startsWith('ArtifactRepoHost'))  &amp;&amp;  (keyRepl !== 'OverrideCDNPath' ) ) {
+                                        if( (wn[keyRepl] == '') ||
+                                            (typeof wn[keyRepl] == 'undefined')
+                                        ){
+                                            wn[keyRepl] = rfpBag[key];
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        SP.SOD.notifyEventAndExecuteWaitingJobs('artifactWAPDefined')
+                    }
+                },'pBagQueried')
+            }
+            
+            //Register to SOD queue with dependanc(ies)
+            function rfRegScrToSODQueue(assetRelLoc, assetName, assetExt, scrDep, elemGUID, elemSeq, boolAnnounce) {
+                SP.SOD.executeOrDelayUntilScriptLoaded(function () {
+                    var scrNameToLower = (assetName.toLowerCase()).toString();
+                    var jsNameToLower = (scrNameToLower + assetExt.toLowerCase()).toString();
+                    var pageComponentScriptUrl = SP.Utilities.UrlBuilder.urlCombine((assetRelLoc.toLowerCase()).toString(), jsNameToLower);
+                    SP.SOD.registerSod(jsNameToLower, pageComponentScriptUrl);
+                    for (i = 0; i &lt; scrDep.length; i++) {
+                        SP.SOD.registerSodDep(jsNameToLower, scrDep[i]);
+                    }
+                    logInfo = &quot;&lt;DIV id='&quot; + jsNameToLower + &quot;'&gt;&lt;a title='&quot; + (elemGUID + &quot;.&quot; + elemSeq) + &quot;' href='&quot; + pageComponentScriptUrl + &quot;'&gt;&lt;\/a&gt;&lt;\/DIV&gt;&quot;;
+                    document.getElementById('Reality.Framework.SOD.Register').innerHTML += logInfo;
+                    LoadSodByKey(jsNameToLower, function () {
+                        if( (typeof boolAnnounce !== 'undefined') || (boolAnnounce !== '') || (boolAnnounce === 'true') ){
+                            SP.SOD.notifyEventAndExecuteWaitingJobs(assetName);
+                            SP.SOD.notifyScriptLoadedAndExecuteWaitingJobs(jsNameToLower);
+                        }
+                    });
+                }, 'sp.js');
+            }
+            RF.regSODwithDEP = rfRegScrToSODQueue;
+
+            function setArtifactLibs(library) {
+                if (typeof artifactDepot == 'undefined') {
+                    if(wn.rfARH.indexOf('http') !== 0) {
+                        var artifactLibURLFQDN = window.location.protocol + '//' + wn.rfARH;
+                    }
+                    else{
+                        var artifactLibURLFQDN = wn.rfARH;
+                    };
+                    if(artifactLibURLFQDN.endsWith('/') == true) {
+                        window.rootArtifactLibURL = artifactLibURLFQDN + library;
+                    }
+                    else{ 
+                        window.rootArtifactLibURL = artifactLibURLFQDN + '/' + library; 
+                    };
+                    if( (wn.rfARHSDF !== '' ) &amp;&amp;
+                        (typeof wn.rfARHSDF !== 'undefined')
+                    ){
+                        window.subDomArtifactLibURL = window.rootArtifactLibURL + '/' + wn.rfARHSDF;
+                    }
+                    else{
+                        window.subDomArtifactLibURL = window.rootArtifactLibURL + '/' + window.location.host;
+                    }
+
+                    //Add Enterprise Artifact Repository to the DOM
+                    window.artifactDepot = document.createElement('div');
+                    window.artifactDepot.id = 'Reality.artifactDepot';
+                    window.artifactDepot.style.visibility ='hidden';
+                    window.artifactDepot.innerHTML = (&quot;&lt;span id='Reality.Framework.WindowVARs'&gt;&lt;/span&gt;&lt;span id='Reality.Framework.ElemStage'&gt;&lt;/span&gt;&lt;span id='Reality.Framework.SOD.Register'&gt;&lt;/span&gt;&quot;);
+                    document.body.appendChild(window.artifactDepot);
+                          
+                    document.getElementById('Reality.Framework.WindowVARs').innerHTML += (&quot;&lt;DIV id='window.currDom'&gt;&lt;a title='window.currDom' href='&quot; + window.currDom + &quot;'&gt;&lt;/&gt;&lt;/&gt;&quot;);
+                    document.getElementById('Reality.Framework.WindowVARs').innerHTML += (&quot;&lt;DIV id='window.rootArtifactLibURL'&gt;&lt;a title='window.rootArtifactLibURL' href='&quot; + window.rootArtifactLibURL + &quot;'&gt;&lt;/&gt;&lt;/&gt;&quot;);
+                    document.getElementById('Reality.Framework.WindowVARs').innerHTML += (&quot;&lt;DIV id='window.subDomArtifactLibURL'&gt;&lt;a title='window.subDomArtifactLibURL' href='&quot; + window.subDomArtifactLibURL + &quot;'&gt;&lt;/&gt;&lt;/&gt;&quot;);
+                        
+                    for (var key in rfpBag){
+                        if( (document.getElementById('Reality.pBagVARsDerived') == null) ){
+                            document.getElementById('Reality.Framework.WindowVARs').innerHTML += (&quot;&lt;DIV id='Reality.pBagVARsDerived'&gt;&lt;/&gt;&quot;);
+                        }
+                        else{
+                            document.getElementById('Reality.pBagVARsDerived').innerHTML += (&quot;&lt;DIV id='&quot; + key + &quot;'&gt;&lt;a title='&quot; + key + &quot;' href='&quot; + rfpBag[key] + &quot;'&gt;&lt;/&gt;&lt;/&gt;&quot;);
+                        };
+                    }
+                          
+                    SP.SOD.notifyEventAndExecuteWaitingJobs('artifactRepoDefined');
+                };
+            };
+            
+            SP.SOD.executeOrDelayUntilEventNotified(function(){
+                if( (typeof wn.entLibName !== 'undefined') &amp;&amp; 
+                    (wn.entLibName !== '')
+                ){
+                    setArtifactLibs(wn.entLibName);
+                }
+                else{
+                    setArtifactLibs('lib');
+                }
+            },'artifactWAPDefined')
+    //END Reality.ArtifactRepoHostFQDN.1001.AddDIVtag
+    "/>
+</Elements>
+
+<!--
+-->

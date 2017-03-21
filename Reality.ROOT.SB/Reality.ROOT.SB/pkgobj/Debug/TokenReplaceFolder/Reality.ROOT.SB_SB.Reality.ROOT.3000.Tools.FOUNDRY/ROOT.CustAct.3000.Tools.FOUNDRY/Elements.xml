@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction
+    Sequence="3001"
+    Id="Reality.Tools.FOUNDRY.3001"
+    Title="Reality.Tools.FOUNDRY.3001"
+    Location="ScriptLink"
+    ScriptBlock="
+    //BEGIN Reality.Tools.FOUNDRY.3001
+            if(!(SP.SOD.executeOrDelayUntilScriptLoaded(function(){},'sp.js'))){LoadSodByKey('sp.js',function(){})};
+            if (typeof prRegScrToSODQueue != 'undefined') {
+                SP.SOD.executeOrDelayUntilEventNotified(function(){
+                    SP.SOD.executeOrDelayUntilScriptLoaded(function () {
+                        prRegScrToSODQueue(('http://www.perpetualreality.com/lib' + '/scripts/FOUNDRY/'), 'Reality.Tools.FOUNDRY.min', '.js', 'sp.js', '600636a9-ef72-46db-8b8b-0dcd2803842c', '3001.0');
+                        prRegScrToSODQueue((window.rootAssetLibURL + '/scripts/FOUNDRY/'), 'Ent.ECMA.FOUNDRY.min', '.js', 'sp.js', '600636a9-ef72-46db-8b8b-0dcd2803842c', '3001.1');
+                    }, 'sp.js');
+                }, 'AssetLibDefined');
+            }
+    //END Reality.Tools.FOUNDRY.3001
+    "/>
+  </Elements>

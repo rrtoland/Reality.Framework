@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction
+    Sequence="2001"
+    Id="Ent.ECMA.Core.FuncLib.2001"
+    Title="Ent.ECMA.Core.FuncLib.2001"
+    Location="ScriptLink"
+    ScriptBlock="
+    //BEGIN Ent.ECMA.Core.FuncLib.2001
+            if(!(SP.SOD.executeOrDelayUntilScriptLoaded(function(){},'sp.js'))){LoadSodByKey('sp.js',function(){})};
+            SP.SOD.executeOrDelayUntilEventNotified(function(){
+                SP.SOD.executeOrDelayUntilScriptLoaded(function () {
+                    prRegScrToSODQueue((window.rootAssetLibURL + '/scripts/CORE/'), 'Ent.ECMA.Core.FuncLib.min', '.js', 'core.js', '79fa3cc7-2395-4478-b986-747c24087e0b', '3001');
+                }, 'sp.js');
+            }, 'AssetLibDefined');
+    //END Ent.ECMA.Core.FuncLib.2001
+    "/>
+  <CustomAction
+    Sequence="2004"
+    Id="Ent.ECMA.Core.Include.2004"
+    Title="Ent.ECMA.Core.Include.2004"
+    Location="ScriptLink"
+    ScriptBlock="
+    //BEGIN Ent.ECMA.Core.Include.2004
+            SP.SOD.executeOrDelayUntilEventNotified(function(){
+                SP.SOD.executeOrDelayUntilScriptLoaded(function () {
+                    prRegScrToSODQueue((window.rootAssetLibURL + '/scripts/CORE/'), 'Ent.ECMA.Core.Include.min', '.js', 'Ent.ECMA.Core.FuncLib.js', '79fa3cc7-2395-4478-b986-747c24087e0b', '3001');
+                }, 'sp.js');
+            }, 'AssetLibDefined');
+    //END Ent.ECMA.Core.Include.2004
+    "/>
+</Elements>
+
+<!--
+-->
